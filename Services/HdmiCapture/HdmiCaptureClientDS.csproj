@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ABDA10D2-B1F4-486E-96FF-0962EA2B0ACB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HdmiCaptureService</RootNamespace>
+    <AssemblyName>HdmiCaptureClientDS</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+    <ApplicationIcon>Simple.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="icecs, Version=3.2.1.0, Culture=neutral, PublicKeyToken=1f998c50fec78381, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Ice-3.2.1\Bin\icecs.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EventsReceiverI.cs" />
+    <Compile Include="Generated\HdmiCaptureDS.cs" />
+    <Compile Include="HdmiCaptureClientDS.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.client" />
+    <None Include="Slice\HdmiCaptureDS.ice" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Simple.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>"C:\Ice-3.2.1\bin\slice2cs.exe" --output-dir "$(ProjectDir)Generated" "$(ProjectDir)Slice\HdmiCaptureDS.ice"
+copy "$(ProjectDir)config.client" "$(ProjectDir)bin\$(ConfigurationName)\config.client"
+</PreBuildEvent>
+    <PostBuildEvent>if exist "$(ProjectDir)bin\$(ConfigurationName)\Start$(TargetName).bat" del "$(ProjectDir)bin\$(ConfigurationName)\Start$(TargetName).bat"
+echo @echo off &gt;&gt; Start$(TargetName).bat
+echo $(TargetName) --Ice.Config=config.client &gt;&gt; Start$(TargetName).bat
+echo pause &gt;&gt; Start$(TargetName).bat</PostBuildEvent>
+  </PropertyGroup>
+</Project>
